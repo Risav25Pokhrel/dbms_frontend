@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'page/loginpage.dart';
+import 'page/testpage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +14,7 @@ class Core extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.indigo),
-      home: const Loginpage(),
+      home: const TestPage(),
     );
   }
 }
