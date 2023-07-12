@@ -61,9 +61,14 @@ class _LoginpageState extends State<Loginpage> {
                       title: "Login",
                       onTap: () async {
                         loading.value = true;
-                        await checkuser(
-                            username: username.text.toString(),
-                            password: password.text.toString());
+                        // await checkuser(
+                        //     username: username.text.toString(),
+                        //     password: password.text.toString());
+
+                        await registerUser(
+                            username: username,
+                            password: password,
+                            phone: "980000000");
 
                         /// use function call backend
 

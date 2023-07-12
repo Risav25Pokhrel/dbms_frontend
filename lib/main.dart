@@ -6,7 +6,6 @@ void main() {
   runApp(const Core());
 }
 
-
 class Core extends StatelessWidget {
   const Core({super.key});
 
