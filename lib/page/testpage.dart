@@ -1,15 +1,16 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend/page/homepage.dart';
 import 'package:http/http.dart' as http;
-
 
 typedef DatabaseTable = List<dynamic>;
 Future<DatabaseTable> fetchTable(String host, String path) async {
   final response = await http.get(Uri.http(host, path));
 
   if (response.statusCode == 200) {
-    final out = response.body;
+    final out = jsonDecode(response.body);
     debugPrint(out.toString());
-    return [];
+    return out;
   } else {
     throw Exception('Failed to fetch table');
   }
@@ -39,7 +40,7 @@ class _DisplayDatabaseTableState extends State<DisplayDatabaseTable> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final rows = snapshot.data as List<dynamic>;
-            return Text(rows[0].toString());
+            return Text(rows.toString());
           } else if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           }
@@ -58,7 +59,7 @@ class CorePage extends StatelessWidget {
   ];
 
   final views = const [
-    Center(child: DisplayDatabaseTable('localhost:8080', 'buses')),
+    Center(child: Mainpage(path: "buses")),
     Center(child: DisplayDatabaseTable('localhost:8080', 'stops')),
     Center(child: DisplayDatabaseTable('localhost:8080', 'routes')),
   ];
@@ -70,6 +71,7 @@ class CorePage extends StatelessWidget {
       child: Scaffold(
           appBar: AppBar(
             title: const Text('Bus Ticketing System'),
+            centerTitle: true,
             bottom: TabBar(tabs: tabs),
           ),
           body: TabBarView(children: views)),
