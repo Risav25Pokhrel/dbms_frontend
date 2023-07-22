@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/page/homepage.dart';
+import 'package:frontend/page/routepage.dart';
 import 'package:http/http.dart' as http;
 
 typedef DatabaseTable = List<dynamic>;
@@ -61,7 +62,7 @@ class CorePage extends StatelessWidget {
   final views = const [
     Center(child: Mainpage(path: "buses")),
     Center(child: DisplayDatabaseTable('localhost:8080', 'stops')),
-    Center(child: DisplayDatabaseTable('localhost:8080', 'routes')),
+    Center(child: RouteSelectionPage()),
   ];
 
   @override

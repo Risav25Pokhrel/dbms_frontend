@@ -17,7 +17,7 @@ class NumberPlate extends StatelessWidget {
               height: 60,
               width: 120,
               decoration: BoxDecoration(
-                  color: Colors.amber.withOpacity(0.7),
+                  color: Colors.white,
                   border: Border.all(width: 2, color: Colors.indigo),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: const [
@@ -27,8 +27,7 @@ class NumberPlate extends StatelessWidget {
                         color: Colors.grey)
                   ]),
               child: AutoSizeText(licensePlate,
-                  textAlign: TextAlign.center,
-                  style: MyFont.headline.copyWith(fontSize: 18)),
+                  textAlign: TextAlign.center, style: MyFont.numberplate),
             ),
             Positioned(
                 left: 8,

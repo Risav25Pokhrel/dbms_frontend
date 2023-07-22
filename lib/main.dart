@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'page/testpage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/page/routepage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const Core());
+  runApp(const ProviderScope(child: Core()));
 }
 
 class Core extends StatelessWidget {
@@ -14,7 +15,7 @@ class Core extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.indigo),
-      home: const CorePage(),
+      home: const RouteSelectionPage(),
     );
   }
 }

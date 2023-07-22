@@ -8,12 +8,15 @@ import 'package:http/http.dart';
 class Requestdata extends Fetchdata {
   @override
   Future<dynamic> fetchtable(String host, String path) async {
-    final response = await http.get(Uri.http(host, path));
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Failed to fetch table');
+    try {
+      final response = await http.get(Uri.http(host, path));
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+    } catch (e) {
+      print("Hya .... karuna hi pida hai... mrytu hi mukti hai");
+      debugPrint(e.toString());
+      throw UnimplementedError();
     }
   }
 
@@ -22,12 +25,13 @@ class Requestdata extends Fetchdata {
     try {
       final response = await fetchtable(host, path);
       debugPrint(response.toString());
+      debugPrint(response.toString());
       for (var i in response) {
         out.add(Buses.fromJson(i[path]));
       }
     } catch (e) {
       debugPrint(e.toString());
-      throw UnimplementedError();
+      throw Exception(e.toString());
     }
     return out;
   }

@@ -21,7 +21,7 @@ class Mainpage extends StatelessWidget {
             return const Center(child: MyProgressIndicator());
           default:
             if (snapshot.hasError) {
-              return const ShowError();
+              return ShowError(errorMessage: snapshot.error.toString());
             } else {
               var data = snapshot.data;
               return SizedBox(
