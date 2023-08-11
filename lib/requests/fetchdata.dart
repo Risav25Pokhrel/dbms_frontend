@@ -14,9 +14,7 @@ class Requestdata extends Fetchdata {
         return jsonDecode(response.body);
       }
     } catch (e) {
-      print("Hya .... karuna hi pida hai... mrytu hi mukti hai");
-      debugPrint(e.toString());
-      throw UnimplementedError();
+      throw Exception(e.toString());
     }
   }
 
@@ -24,8 +22,6 @@ class Requestdata extends Fetchdata {
     List<Buses> out = [];
     try {
       final response = await fetchtable(host, path);
-      debugPrint(response.toString());
-      debugPrint(response.toString());
       for (var i in response) {
         out.add(Buses.fromJson(i[path]));
       }

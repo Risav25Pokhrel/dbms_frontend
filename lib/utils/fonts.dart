@@ -6,6 +6,6 @@ final class MyFont {
       GoogleFonts.merriweather(fontSize: 20, fontWeight: FontWeight.bold);
   static final TextStyle content =
       GoogleFonts.ubuntuCondensed(fontSize: 18, fontWeight: FontWeight.w500);
-  static final TextStyle numberplate =
-      GoogleFonts.cormorantGaramond(fontSize: 18, color: Colors.black);
+  static final TextStyle numberplate = GoogleFonts.cormorantGaramond(
+      fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold);
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/notifier.dart/notifiers.dart';
 import 'package:frontend/page/homepage.dart';
 import 'package:frontend/routing/routing.dart';
 import 'package:frontend/widgets/mybutton.dart';
 import '../widgets/markplace.dart';
+import '../widgets/showdestination.dart';
 
 class RouteSelectionPage extends StatefulWidget {
   const RouteSelectionPage({super.key});
@@ -18,9 +18,14 @@ class _RouteSelectionPageState extends State<RouteSelectionPage> {
     return InteractiveViewer(
       maxScale: 4,
       child: Scaffold(
+        backgroundColor: Colors.transparent,
+        extendBody: true,
+        extendBodyBehindAppBar: true,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         appBar: AppBar(
+          elevation: 0,
           title: const ShowDestination(),
+          backgroundColor: Colors.transparent,
         ),
         floatingActionButton: SizedBox(
             width: 300,
@@ -28,8 +33,11 @@ class _RouteSelectionPageState extends State<RouteSelectionPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                MyButton(title: "Update", onTap: () => setState(() {})),
-                MyButton(title: "Query", onTap: ()=>Routing().withoutReplacement(context, page: const Mainpage(path: 'buses')))
+                MyButton(
+                    title: "Query",
+                    color: Colors.redAccent,
+                    onTap: () => Routing().withoutReplacement(context,
+                        page: const Mainpage(path: "buses")))
               ],
             )),
         body: Container(
@@ -52,23 +60,25 @@ class _RouteSelectionPageState extends State<RouteSelectionPage> {
                       filterQuality: FilterQuality.high, fit: BoxFit.fitWidth),
                 ),
                 const MarkPlaces(
-                    place: "Kathmandu", right: 360, top: 330, id: 0),
-                const MarkPlaces(place: "Pokhara", left: 600, down: 230, id: 1),
+                    place: "Kathmandu", right: 420, top: 400, id: 0),
                 const MarkPlaces(
-                    place: "Birjung", right: 460, down: 100, id: 2),
-                const MarkPlaces(place: "Gaur", right: 400, down: 60, id: 3),
+                    place: "Pokhara", right: 680, down: 300, id: 1),
                 const MarkPlaces(
-                    place: "Rajbiraj", right: 230, down: 20, id: 4),
+                    place: "Birjung", right: 530, down: 120, id: 2),
+                const MarkPlaces(place: "Gaur", right: 470, down: 80, id: 3),
                 const MarkPlaces(
-                    place: "Janakpur", right: 290, down: 20, id: 5),
-                const MarkPlaces(place: "Bardibas", right: 185, down: 8, id: 6),
-                const MarkPlaces(place: "Dharan", right: 120, down: 30, id: 7),
+                    place: "Rajbiraj", right: 300, down: 40, id: 4),
                 const MarkPlaces(
-                    place: "Biratnagar", right: 100, top: 505, id: 8),
-                const MarkPlaces(place: "Damak", right: 75, top: 480, id: 9),
+                    place: "Janakpur", right: 370, down: 50, id: 5),
+                const MarkPlaces(
+                    place: "Bardibas", right: 195, down: 18, id: 6),
+                const MarkPlaces(place: "Dharan", right: 140, down: 50, id: 7),
+                const MarkPlaces(
+                    place: "Biratnagar", right: 120, down: 0, id: 8),
+                const MarkPlaces(place: "Damak", right: 87, down: 20, id: 9),
                 const MarkPlaces(place: "Illam", right: 30, down: 60, id: 10),
                 const MarkPlaces(
-                    place: "Kakadvitta", right: -10, down: 10, id: 11),
+                    place: "Kakadvitta", right: 5, down: 10, id: 11),
               ],
             ),
           ),
@@ -76,36 +86,33 @@ class _RouteSelectionPageState extends State<RouteSelectionPage> {
       ),
     );
   }
-}
 
-class ShowDestination extends StatelessWidget {
-  const ShowDestination({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: selected,
-      builder: (context, value, child) {
-        String from;
-        List<String> to = [];
-        try {
-          from = routeID[value[0]]!;
-        } catch (e) {
-          from = '';
-        }
-        try {
-          for (int i = 0; i < value.length; i++) {
-            if (i != 0) {
-              to.add(routeID[value[i]]!);
-            }
-          }
-        } catch (e) {
-          to = [];
-        }
-        return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [Text("FROM : $from"), Text("To: ${to.toString()}")]);
-      },
-    );
-  }
+  // void confirmation() async => await showModalBottomSheet(
+  //     context: context,
+  //     builder: (context) {
+  //       return Container(
+  //         height: 150,
+  //         color: Colors.white,
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.start,
+  //           crossAxisAlignment: CrossAxisAlignment.center,
+  //           children: [
+  //             const ShowDestination(),
+  //             const SizedBox(height: 30),
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //               crossAxisAlignment: CrossAxisAlignment.center,
+  //               children: [
+  //                 MyButton(
+  //                     onTap: () => Routing().withoutReplacement(context,
+  //                         page: const Mainpage(path: "buses")),
+  //                     title: "Confirm"),
+  //                 MyButton(
+  //                     onTap: () => Navigator.of(context).pop(), title: "Cancel")
+  //               ],
+  //             )
+  //           ],
+  //         ),
+  //       );
+  //     });
 }

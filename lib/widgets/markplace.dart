@@ -1,8 +1,9 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
+
 import 'package:flutter/material.dart';
-import 'package:frontend/page/routepage.dart';
 import '../utils/fonts.dart';
 
-final selected = ValueNotifier<List<int>>([0, 9, 11]);
+final selectedroute = ValueNotifier<List<int>>([0]);
 
 class MarkPlaces extends StatefulWidget {
   const MarkPlaces(
@@ -35,21 +36,20 @@ class _MarkPlacesState extends State<MarkPlaces> {
         bottom: widget.down,
         height: 200,
         child: ValueListenableBuilder(
-          valueListenable: selected,
+          valueListenable: selectedroute,
           builder: (context, route, child) {
-            debugPrint(route.toString());
             final isSelected = route.contains(widget.id);
             return GestureDetector(
               onTap: () {
                 if (isSelected) {
                   route.remove(widget.id);
-                  selected.value = route;
-                  setState(() {
-                    const ShowDestination();
-                  });
+                  selectedroute.value = route;
+                  selectedroute.notifyListeners();
+                  setState(() {});
                 } else {
                   route.add(widget.id);
-                  selected.value = route;
+                  selectedroute.value = route;
+                  selectedroute.notifyListeners();
                   setState(() {});
                 }
               },
@@ -58,8 +58,7 @@ class _MarkPlacesState extends State<MarkPlaces> {
                 children: [
                   Text(" ${widget.place}",
                       style: MyFont.headline.copyWith(
-                          color:
-                              isSelected ? Colors.yellowAccent : Colors.white,
+                          color: isSelected ? Colors.pink : Colors.white,
                           fontSize: 12,
                           backgroundColor: Colors.black)),
                   SizedBox(

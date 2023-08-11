@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 final Map<int, String> routeID = {
   0: "Kathmandu",
   1: "Pokhara",
@@ -12,3 +14,7 @@ final Map<int, String> routeID = {
   10: "Illam",
   11: "Kakadvitta"
 };
+
+final availableSeat = ValueNotifier<List<String>>([]);
+
+final selectedSeat = ValueNotifier<List<String>>([]);
