@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models.dart/bus.dart';
+
+import 'package:frontend/models.dart/tickets.dart';
 import 'package:frontend/notifier.dart/notifiers.dart';
 import 'package:frontend/utils/fonts.dart';
 import 'package:frontend/widgets/mybutton.dart';
@@ -8,9 +9,9 @@ import 'package:frontend/widgets/showdestination.dart';
 import 'package:intl/intl.dart';
 
 class Fillform extends StatefulWidget {
-  const Fillform({super.key, required this.bus});
+  const Fillform({super.key, required this.tx});
 
-  final Buses bus;
+  final Tickets tx;
   @override
   State<Fillform> createState() => _FillformState();
 }
@@ -47,15 +48,15 @@ class _FillformState extends State<Fillform> {
               prefixIcon: Icons.phone),
           myseats(),
           myrich(
-              leading: "Rate:-", trailing: "RS. ${widget.bus.rate.toString()}"),
+              leading: "Rate:-", trailing: "RS. ${widget.tx.price.toString()}"),
           const Divider(thickness: 4),
-          mytotalrate(widget.bus),
+          mytotalrate(widget.tx),
           const SizedBox(height: 20),
           Center(
             child: MyButton(
               title: "Book Ticket",
               onTap: () async {
-                await showTicket(context, widget.bus, name.text.toString(),
+                await showTicket(context, widget.tx, name.text.toString(),
                     phone.text.toString());
               },
             ),
@@ -74,11 +75,11 @@ myseats() => ValueListenableBuilder(
             trailing: value.toString().replaceAll("[", "").replaceAll("]", ""));
       },
     );
-mytotalrate(Buses bus) {
+mytotalrate(Tickets tx) {
   return ValueListenableBuilder(
     valueListenable: selectedSeat,
     builder: (BuildContext context, dynamic value, Widget? child) {
-      final double total = value.length * bus.rate;
+      final double total = value.length * double.parse(tx.price);
       return myrich(
           leading: "Grand Total:-", trailing: "RS. ${total.toString()}");
     },
@@ -94,7 +95,7 @@ myrich(
   ]));
 }
 
-showTicket(ctx, Buses bus, String name, String phone) async {
+showTicket(ctx, Tickets tx, String name, String phone) async {
   await showDialog(
     context: ctx,
     builder: (context) => AlertDialog(
@@ -102,14 +103,16 @@ showTicket(ctx, Buses bus, String name, String phone) async {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-              height: 250, width: 250, child: Image.asset("assets/${bus.url}")),
-          Text(bus.busname,
+              height: 250,
+              width: 250,
+              child: Image.asset("assets/${tx.bus.imageUrl}")),
+          Text(tx.bus.busname,
               style:
                   MyFont.headline.copyWith(fontSize: 55, color: Colors.teal)),
         ],
       ),
       content: SizedBox(
-        height: 240,
+        height: 300,
         width: 800,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -121,7 +124,7 @@ showTicket(ctx, Buses bus, String name, String phone) async {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                myrich(leading: "Name:- ", trailing: name),
+                myrich(leading: "Name:- ", trailing: name.toUpperCase()),
                 myrich(leading: "Phone:- ", trailing: phone)
               ],
             ),
@@ -131,7 +134,7 @@ showTicket(ctx, Buses bus, String name, String phone) async {
                 myseats(),
                 myrich(
                     leading: "Bus Number:- ",
-                    trailing: bus.licensePlate,
+                    trailing: tx.bus.licensePlate,
                     color: Colors.pink)
               ],
             ),
@@ -154,18 +157,22 @@ showTicket(ctx, Buses bus, String name, String phone) async {
               ],
             ),
             const SizedBox(height: 5),
-            myrich(leading: "Departure Time:-", trailing: bus.deptime),
+            myrich(leading: "Departure Time:-", trailing: tx.depttime),
             const Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                mytotalrate(bus),
+                mytotalrate(tx),
                 SizedBox(
                   height: 70,
                   width: 70,
                   child: Image.asset("assets/qr.png"),
                 )
               ],
+            ),
+            MyButton(
+              title: "Confirm",
+              onTap: () {},
             )
           ],
         ),

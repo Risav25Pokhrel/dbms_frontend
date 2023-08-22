@@ -14,7 +14,7 @@ class Core extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.indigo),
-      home: const RouteSelectionPage(),
+      home: const RouteSelection(),
     );
   }
 }

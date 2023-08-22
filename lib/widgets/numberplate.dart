@@ -26,8 +26,10 @@ class NumberPlate extends StatelessWidget {
                         offset: Offset(10, 10),
                         color: Colors.grey)
                   ]),
-              child: AutoSizeText(licensePlate,
-                  textAlign: TextAlign.center, style: MyFont.numberplate),
+              child: Center(
+                child: AutoSizeText(licensePlate,
+                    textAlign: TextAlign.center, style: MyFont.numberplate),
+              ),
             ),
             Positioned(
                 left: 8,

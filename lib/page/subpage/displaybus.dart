@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/numberplate.dart';
 import '../../models.dart/bus.dart';
 import '../../utils/fonts.dart';
 
@@ -23,8 +24,9 @@ class DisplayBus extends StatelessWidget {
                     .copyWith(fontSize: 45, color: Colors.brown)),
           ),
           const Spacer(),
-          Hero(tag: bus.url, child: Image.asset("assets/${bus.url}")),
+          Hero(tag: bus.imageUrl, child: Image.asset("assets/${bus.imageUrl}")),
           const Spacer(),
+          NumberPlate(licensePlate: bus.licensePlate)
         ],
       ),
     );

@@ -8,9 +8,11 @@ class MyButton extends StatelessWidget {
       this.loading = false,
       this.color = Colors.teal,
       required this.onTap,
+      this.txtclr = Colors.white,
       this.isAbsorbed = false});
 
   final String title;
+  final Color txtclr;
   final bool loading;
   final Color color;
   final bool isAbsorbed;
@@ -24,6 +26,7 @@ class MyButton extends StatelessWidget {
         child: ElevatedButton(
             onPressed: onTap,
             style: ElevatedButton.styleFrom(
+                elevation: 0,
                 backgroundColor: color,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20))),
@@ -38,7 +41,7 @@ class MyButton extends StatelessWidget {
                       end: Colors.black,
                     )),
                   )
-                : Text(title, style: const TextStyle(fontSize: 20))),
+                : Text(title, style: TextStyle(fontSize: 20, color: txtclr))),
       ),
     );
   }

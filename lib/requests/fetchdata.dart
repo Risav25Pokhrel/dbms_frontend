@@ -1,45 +1,38 @@
 import 'dart:convert';
-import 'package:frontend/models.dart/bus.dart';
-import 'package:frontend/requests/basefetching.dart';
-import 'package:flutter/material.dart';
+import 'dart:developer';
+import 'package:frontend/models.dart/tickets.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
-class Requestdata extends Fetchdata {
-  @override
-  Future<dynamic> fetchtable(String host, String path) async {
-    try {
-      final response = await http.get(Uri.http(host, path));
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      }
-    } catch (e) {
-      throw Exception(e.toString());
-    }
-  }
+typedef AvailableBus = List<Tickets>;
+const String baseUrl = "localhost:8080";
+Future<AvailableBus> getBusList(
+    {required String start, required String end}) async {
+  AvailableBus buses = [];
+  try {
+    /*********************Get Route ID******************************/
+    Uri request =
+        Uri.http(baseUrl, "/routes", {"start_at": start, "end_at": end});
+    Response response = await http.get(request);
 
-  Future<List<Buses>> getBusData(path, {host = "localhost:8080"}) async {
-    List<Buses> out = [];
-    try {
-      final response = await fetchtable(host, path);
-      for (var i in response) {
-        out.add(Buses.fromJson(i[path]));
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-      throw Exception(e.toString());
-    }
-    return out;
-  }
+    /************************Get Available Bus*************************************/
+    request = Uri.http(baseUrl, "/tickets",
+        {"route_id": jsonDecode(response.body)[0][0].toString()});
 
-  @override
-  Future<dynamic> postData(myclass, path, {host = "localhost:8080"}) async {
-    final body = myclass.toJson();
-    try {
-      final response = await post(Uri.http(host, path), body: jsonEncode(body));
-      return response.body;
-    } catch (e) {
-      debugPrint(e.toString());
+    response = await http.get(request);
+    List<dynamic> ticket = jsonDecode(response.body);
+    /***************************Get total Info***************************************/
+    for (int i = 0; i < ticket.length; i++) {
+      request = Uri.http(baseUrl, "/buses", {"licenseplate": ticket[i][1]});
+      response = await http.get(request);
+      ticket[i].add(jsonDecode(response.body)[0]);
     }
+    /********************Change to Ticket Module*******************************/
+    for (var i in ticket) {
+      buses.add(Tickets.fromJson(i));
+    }
+  } catch (e) {
+    log(e.toString());
   }
+  return buses;
 }

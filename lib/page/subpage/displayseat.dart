@@ -36,11 +36,11 @@ class DisplaySeat extends StatelessWidget {
           ),
           Text("Door -->", style: MyFont.headline),
           const SizedBox(height: 10),
-          Row(
+          const Row(
             children: [
-              const SizedBox(width: 40),
-              BuildSeats(side: "A", size: int.parse(bus.capacity)),
-              BuildSeats(side: "B", size: int.parse(bus.capacity)),
+              SizedBox(width: 40),
+              BuildSeats(side: "A", size: 30),
+              BuildSeats(side: "B", size: 30),
             ],
           )
         ],
