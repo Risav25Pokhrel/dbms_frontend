@@ -5,12 +5,8 @@ import 'package:frontend/widgets/mycontainer.dart';
 import 'package:frontend/widgets/showdestination.dart';
 import 'package:intl/intl.dart';
 
+import '../notifier.dart/notifiers.dart';
 import '../widgets/dropdown.dart';
-
-final isNight = ValueNotifier<bool>(true);
-final date = ValueNotifier<DateTime>(DateTime.now());
-final from = ValueNotifier<String>('');
-final to = ValueNotifier<String>('');
 
 class RouteSelection extends StatelessWidget {
   const RouteSelection({super.key});
@@ -27,6 +23,7 @@ class RouteSelection extends StatelessWidget {
           backgroundColor: const Color.fromARGB(255, 29, 38, 85),
         ),
         body: SingleChildScrollView(
+          physics:const BouncingScrollPhysics(),
           scrollDirection: Axis.vertical,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -182,13 +179,4 @@ class RouteSelection extends StatelessWidget {
           ),
         ));
   }
-}
-
-myrich(
-    {required String leading,
-    required String trailing,
-    Color color = Colors.indigo}) {
-  return Text.rich(TextSpan(style: MyFont.headline, text: leading, children: [
-    TextSpan(style: MyFont.headline.copyWith(color: color), text: trailing)
-  ]));
 }

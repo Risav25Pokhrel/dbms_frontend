@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-
-import 'package:frontend/models.dart/tickets.dart';
+import 'package:frontend/models.dart/trips.dart';
 import 'package:frontend/notifier.dart/notifiers.dart';
 import 'package:frontend/utils/fonts.dart';
 import 'package:frontend/widgets/mybutton.dart';
 import 'package:frontend/widgets/myformfield.dart';
 import 'package:frontend/widgets/showdestination.dart';
 import 'package:intl/intl.dart';
+import '../../widgets/rich.dart';
 
 class Fillform extends StatefulWidget {
   const Fillform({super.key, required this.tx});
 
-  final Tickets tx;
+  final Trips tx;
   @override
   State<Fillform> createState() => _FillformState();
 }
@@ -75,27 +75,22 @@ myseats() => ValueListenableBuilder(
             trailing: value.toString().replaceAll("[", "").replaceAll("]", ""));
       },
     );
-mytotalrate(Tickets tx) {
+mytotalrate(Trips tx) {
   return ValueListenableBuilder(
     valueListenable: selectedSeat,
     builder: (BuildContext context, dynamic value, Widget? child) {
-      final double total = value.length * double.parse(tx.price);
+      final int total = value.length * tx.price;
       return myrich(
           leading: "Grand Total:-", trailing: "RS. ${total.toString()}");
     },
   );
 }
 
-myrich(
-    {required String leading,
-    required String trailing,
-    Color color = Colors.indigo}) {
-  return Text.rich(TextSpan(style: MyFont.headline, text: leading, children: [
-    TextSpan(style: MyFont.headline.copyWith(color: color), text: trailing)
-  ]));
-}
 
-showTicket(ctx, Tickets tx, String name, String phone) async {
+showTicket(ctx, Trips tx, String name, String phone) async {
+  final datetime = DateTime.parse(tx.departure);
+  final depttime = DateFormat('jm').format(datetime);
+
   await showDialog(
     context: ctx,
     builder: (context) => AlertDialog(
@@ -105,8 +100,9 @@ showTicket(ctx, Tickets tx, String name, String phone) async {
           SizedBox(
               height: 250,
               width: 250,
-              child: Image.asset("assets/${tx.bus.imageUrl}")),
-          Text(tx.bus.busname,
+              child:Image.asset(tx.imageUrl) 
+              ),
+          Text(tx.busName,
               style:
                   MyFont.headline.copyWith(fontSize: 55, color: Colors.teal)),
         ],
@@ -134,7 +130,7 @@ showTicket(ctx, Tickets tx, String name, String phone) async {
                 myseats(),
                 myrich(
                     leading: "Bus Number:- ",
-                    trailing: tx.bus.licensePlate,
+                    trailing: tx.busNumber,
                     color: Colors.pink)
               ],
             ),
@@ -145,9 +141,8 @@ showTicket(ctx, Tickets tx, String name, String phone) async {
                 myrich(
                     color: Colors.red,
                     leading: "Departure Date:-",
-                    trailing: DateFormat.yMMMMd('en_US')
-                        .format(DateTime.now())
-                        .toString()),
+                    trailing:
+                        DateFormat.yMMMMd('en_US').format(datetime).toString()),
                 myrich(
                     color: Colors.red,
                     leading: "Ticketing Date:-",
@@ -157,7 +152,7 @@ showTicket(ctx, Tickets tx, String name, String phone) async {
               ],
             ),
             const SizedBox(height: 5),
-            myrich(leading: "Departure Time:-", trailing: tx.depttime),
+            myrich(leading: "Departure Time:-", trailing: depttime),
             const Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

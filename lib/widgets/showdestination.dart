@@ -1,7 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/page/routepage.dart';
 import 'package:frontend/utils/fonts.dart';
+
+import '../notifier.dart/notifiers.dart';
 
 class ShowDestination extends StatelessWidget {
   const ShowDestination({super.key, this.color = Colors.white});

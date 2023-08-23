@@ -14,7 +14,7 @@ class BuildSeats extends StatelessWidget {
         width: 150,
         child: ListView.builder(
             shrinkWrap: true,
-            itemCount: (size ~/ 4).toInt(),
+            itemCount: size,
             itemBuilder: (context, i) => Row(
                   children: [
                     Seat(seatno: side + (2 * i + 1).toString()),

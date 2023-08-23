@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models.dart/bus.dart';
+import 'package:frontend/models.dart/trips.dart';
 
 import '../../utils/fonts.dart';
 import '../../widgets/seat.dart';
@@ -8,9 +8,9 @@ import '../buildseat.dart';
 class DisplaySeat extends StatelessWidget {
   const DisplaySeat({
     super.key,
-    required this.bus,
+    required this.tx,
   });
-  final Buses bus;
+  final Trips tx;
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +36,11 @@ class DisplaySeat extends StatelessWidget {
           ),
           Text("Door -->", style: MyFont.headline),
           const SizedBox(height: 10),
-          const Row(
+          Row(
             children: [
-              SizedBox(width: 40),
-              BuildSeats(side: "A", size: 30),
-              BuildSeats(side: "B", size: 30),
+              const SizedBox(width: 30),
+              BuildSeats(side: "A", size: tx.rows),
+              BuildSeats(side: "B", size: tx.rows),
             ],
           )
         ],
