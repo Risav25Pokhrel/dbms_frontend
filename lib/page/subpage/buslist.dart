@@ -18,7 +18,7 @@ class BusList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
         valueListenable: notifier,
-        builder: (context, fromplace, child) {
+        builder: (context, _, __) {
           if (notifier.value = false) {
             return const Placeholder();
           }

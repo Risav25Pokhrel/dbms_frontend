@@ -5,6 +5,7 @@ import 'subpage/displaybus.dart';
 import 'subpage/displayseat.dart';
 import 'package:frontend/widgets/progressindicator.dart';
 import 'package:frontend/widgets/error.dart';
+import 'package:frontend/widgets/seat.dart';
 
 class BusView extends StatelessWidget {
   const BusView({super.key, required this.trip});
@@ -30,13 +31,29 @@ class BusView extends StatelessWidget {
             } else {
               final url = snapshot.data!['info'][0][0];
               final rows = snapshot.data!['info'][0][1];
-              final taken = snapshot.data!['seats'];
               trip['bus_img_url'] = url;
+
+              for (var i = 0; i < rows; i++) {
+                final a1 = 'A${2 * i + 1}';
+                final a2 = 'A${2 * i + 2}';
+                final b1 = 'B${2 * i + 1}';
+                final b2 = 'B${2 * i + 2}';
+                seatStates[a1] = ValueNotifier<SeatState>(SeatState.free);
+                seatStates[a2] = ValueNotifier<SeatState>(SeatState.free);
+                seatStates[b1] = ValueNotifier<SeatState>(SeatState.free);
+                seatStates[b2] = ValueNotifier<SeatState>(SeatState.free);
+              }
+
+              snapshot.data!['seats'].map((i) {
+                seatStates[i[0]]?.value = SeatState.taken;
+              });
+
               return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     DisplayBus(lp: lp, name: name, url: url),
-                    DisplaySeat(rows: rows, taken: taken),
+                    DisplaySeat(rows: rows),
                     Fillform(trip: trip),
                   ]);
             }

@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../utils/fonts.dart';
-import '../../widgets/seat.dart';
 import '../buildseat.dart';
 
 class DisplaySeat extends StatelessWidget {
   const DisplaySeat({
     super.key,
     required this.rows,
-    required this.taken,
   });
 
   final int rows;
-  final List<dynamic> taken;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +16,7 @@ class DisplaySeat extends StatelessWidget {
       scrollDirection: Axis.vertical,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text("Bus Seat",
               style:

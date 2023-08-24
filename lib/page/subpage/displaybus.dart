@@ -19,15 +19,18 @@ class DisplayBus extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Center(
-            child: Text(name,
-                style: MyFont.headline
-                    .copyWith(fontSize: 45, color: Colors.brown)),
-          ),
+          Text(name,
+              style:
+                  MyFont.headline.copyWith(fontSize: 45, color: Colors.brown)),
           const Spacer(),
-          Hero(tag: url, child: Image.asset("assets/$url")),
+          SizedBox(
+            width: 400,
+            height: 400,
+            child: Image.asset("assets/$url",
+                fit: BoxFit.cover, filterQuality: FilterQuality.high),
+          ),
           const Spacer(),
           NumberPlate(licensePlate: lp)
         ],
