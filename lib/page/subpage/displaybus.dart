@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/numberplate.dart';
-import '../../models.dart/bus.dart';
 import '../../utils/fonts.dart';
 
 class DisplayBus extends StatelessWidget {
   const DisplayBus({
     super.key,
-    required this.bus,
+    required this.lp,
+    required this.name,
+    required this.url,
   });
 
-  final Buses bus;
+  final String lp;
+  final String name;
+  final String url;
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +22,14 @@ class DisplayBus extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
-            child: Text(bus.busname,
+            child: Text(name,
                 style: MyFont.headline
                     .copyWith(fontSize: 45, color: Colors.brown)),
           ),
           const Spacer(),
-          Hero(tag: bus.imageUrl, child: Image.asset("assets/${bus.imageUrl}")),
+          Hero(tag: url, child: Image.asset("assets/$url")),
           const Spacer(),
-          NumberPlate(licensePlate: bus.licensePlate)
+          NumberPlate(licensePlate: lp)
         ],
       ),
     );

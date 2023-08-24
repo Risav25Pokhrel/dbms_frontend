@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-
-import 'package:frontend/models.dart/tickets.dart';
 import 'package:frontend/notifier.dart/notifiers.dart';
 import 'package:frontend/utils/fonts.dart';
 import 'package:frontend/widgets/mybutton.dart';
 import 'package:frontend/widgets/myformfield.dart';
-import 'package:frontend/widgets/showdestination.dart';
 import 'package:intl/intl.dart';
 
 class Fillform extends StatefulWidget {
-  const Fillform({super.key, required this.tx});
+  const Fillform({super.key, required this.trip});
+  final Map<dynamic, dynamic> trip;
 
-  final Tickets tx;
   @override
   State<Fillform> createState() => _FillformState();
 }
@@ -38,7 +35,6 @@ class _FillformState extends State<Fillform> {
           Text(format.format(DateTime.now()).toString(),
               style: MyFont.headline.copyWith(fontSize: 18)),
           const SizedBox(height: 10),
-          const ShowDestination(color: Colors.indigo),
           const SizedBox(height: 10),
           MyTextFormField(
               controller: name, labelText: "Name", prefixIcon: Icons.person),
@@ -48,15 +44,16 @@ class _FillformState extends State<Fillform> {
               prefixIcon: Icons.phone),
           myseats(),
           myrich(
-              leading: "Rate:-", trailing: "RS. ${widget.tx.price.toString()}"),
+              leading: "Rate:-",
+              trailing: "RS. ${widget.trip['price'].toString()}"),
           const Divider(thickness: 4),
-          mytotalrate(widget.tx),
+          mytotalrate(widget.trip['price']),
           const SizedBox(height: 20),
           Center(
             child: MyButton(
               title: "Book Ticket",
               onTap: () async {
-                await showTicket(context, widget.tx, name.text.toString(),
+                await showTicket(context, widget.trip, name.text.toString(),
                     phone.text.toString());
               },
             ),
@@ -75,11 +72,12 @@ myseats() => ValueListenableBuilder(
             trailing: value.toString().replaceAll("[", "").replaceAll("]", ""));
       },
     );
-mytotalrate(Tickets tx) {
+
+mytotalrate(int price) {
   return ValueListenableBuilder(
     valueListenable: selectedSeat,
     builder: (BuildContext context, dynamic value, Widget? child) {
-      final double total = value.length * double.parse(tx.price);
+      final double total = value.length * price;
       return myrich(
           leading: "Grand Total:-", trailing: "RS. ${total.toString()}");
     },
@@ -95,7 +93,7 @@ myrich(
   ]));
 }
 
-showTicket(ctx, Tickets tx, String name, String phone) async {
+showTicket(ctx, Map<dynamic, dynamic> tr, String name, String phone) async {
   await showDialog(
     context: ctx,
     builder: (context) => AlertDialog(
@@ -105,8 +103,8 @@ showTicket(ctx, Tickets tx, String name, String phone) async {
           SizedBox(
               height: 250,
               width: 250,
-              child: Image.asset("assets/${tx.bus.imageUrl}")),
-          Text(tx.bus.busname,
+              child: Image.asset("assets/${tr['bus_img_url']}")),
+          Text(tr['bus_name'],
               style:
                   MyFont.headline.copyWith(fontSize: 55, color: Colors.teal)),
         ],
@@ -118,8 +116,6 @@ showTicket(ctx, Tickets tx, String name, String phone) async {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-                width: 400, child: ShowDestination(color: Colors.brown)),
             const SizedBox(height: 3),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -134,7 +130,7 @@ showTicket(ctx, Tickets tx, String name, String phone) async {
                 myseats(),
                 myrich(
                     leading: "Bus Number:- ",
-                    trailing: tx.bus.licensePlate,
+                    trailing: tr['bus_number'],
                     color: Colors.pink)
               ],
             ),
@@ -157,12 +153,15 @@ showTicket(ctx, Tickets tx, String name, String phone) async {
               ],
             ),
             const SizedBox(height: 5),
-            myrich(leading: "Departure Time:-", trailing: tx.depttime),
+            myrich(
+                leading: "Departure Time:-",
+                trailing: DateFormat('yyyy-MM-dd hh:mm')
+                    .format(DateTime.parse(tr['departure']))),
             const Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                mytotalrate(tx),
+                mytotalrate(tr['price']),
                 SizedBox(
                   height: 70,
                   width: 70,

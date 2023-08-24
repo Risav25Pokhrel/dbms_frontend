@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:frontend/widgets/seat.dart';
 
 class BuildSeats extends StatelessWidget {
-  const BuildSeats({super.key, required this.side, required this.size});
+  const BuildSeats({super.key, required this.side, required this.rows});
 
   final String side;
-  final int size;
+  final int rows;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,7 +14,7 @@ class BuildSeats extends StatelessWidget {
         width: 150,
         child: ListView.builder(
             shrinkWrap: true,
-            itemCount: (size ~/ 4).toInt(),
+            itemCount: rows,
             itemBuilder: (context, i) => Row(
                   children: [
                     Seat(seatno: side + (2 * i + 1).toString()),

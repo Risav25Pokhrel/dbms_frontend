@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/page/routepage.dart';
+import 'package:frontend/page/tripselection.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,8 +13,10 @@ class Core extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.indigo),
-      home: const RouteSelection(),
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+      ),
+      home: const TripSelection(),
     );
   }
 }
