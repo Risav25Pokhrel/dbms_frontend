@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models.dart/trips.dart';
 import 'package:frontend/notifier.dart/notifiers.dart';
 import 'package:frontend/utils/fonts.dart';
+import 'package:frontend/widgets/messenger.dart';
 import 'package:frontend/widgets/mybutton.dart';
 import 'package:frontend/widgets/myformfield.dart';
 import 'package:frontend/widgets/showdestination.dart';
@@ -30,7 +31,7 @@ class _FillformState extends State<Fillform> {
   Widget build(BuildContext context) {
     final format = DateFormat.yMMMMd('en_US');
     return SizedBox(
-      width: 400,
+      width: 500,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -86,7 +87,6 @@ mytotalrate(Trips tx) {
   );
 }
 
-
 showTicket(ctx, Trips tx, String name, String phone) async {
   final datetime = DateTime.parse(tx.departure);
   final depttime = DateFormat('jm').format(datetime);
@@ -97,11 +97,7 @@ showTicket(ctx, Trips tx, String name, String phone) async {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-              height: 250,
-              width: 250,
-              child:Image.asset(tx.imageUrl) 
-              ),
+          SizedBox(height: 250, width: 250, child: Image.asset(tx.imageUrl)),
           Text(tx.busName,
               style:
                   MyFont.headline.copyWith(fontSize: 55, color: Colors.teal)),
@@ -115,7 +111,7 @@ showTicket(ctx, Trips tx, String name, String phone) async {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
-                width: 400, child: ShowDestination(color: Colors.brown)),
+                width: 600, child: ShowDestination(color: Colors.brown)),
             const SizedBox(height: 3),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -167,7 +163,15 @@ showTicket(ctx, Trips tx, String name, String phone) async {
             ),
             MyButton(
               title: "Confirm",
-              onTap: () {},
+              onTap: () {
+                for (var i in selectedSeat.value) {
+                  availableSeat.value.remove(i);
+                }
+                selectedSeat.value = [];
+                Navigator.pop(context);
+                Meta().showMessage(ctx,
+                    message: "Ticket Booked for $name", color: Colors.green);
+              },
             )
           ],
         ),

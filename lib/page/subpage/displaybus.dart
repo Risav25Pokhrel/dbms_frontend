@@ -31,11 +31,9 @@ class DisplayBus extends StatelessWidget {
           ),
           const Spacer(),
           SizedBox(
-              height: 600,
-              width: 600,
-              child: Hero(
-                  tag: tx.busNumber, child: Image.asset(tx.imageUrl)
-                  )),
+              height: 550,
+              width: 550,
+              child: Hero(tag: tx.busNumber, child: Image.asset(tx.imageUrl))),
           const Spacer(),
         ],
       ),
