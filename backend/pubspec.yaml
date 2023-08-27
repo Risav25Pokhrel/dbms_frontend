@@ -1,0 +1,12 @@
+name: backend
+description: Backend for DBMS project
+publish_to: 'none'
+version: 1.0.0
+repository: https://github.com/ronejfourn/dbms_backend
+
+environment:
+  sdk: ^3.0.5
+
+dependencies:
+  postgres: ^2.6.1
+  shelf: ^1.4.1
