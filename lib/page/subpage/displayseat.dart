@@ -6,9 +6,11 @@ class DisplaySeat extends StatelessWidget {
   const DisplaySeat({
     super.key,
     required this.rows,
+    required this.seatStates,
   });
 
   final int rows;
+  final dynamic seatStates;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +36,8 @@ class DisplaySeat extends StatelessWidget {
           Row(
             children: [
               const SizedBox(width: 40),
-              BuildSeats(side: "A", rows: rows),
-              BuildSeats(side: "B", rows: rows),
+              BuildSeats(side: "A", rows: rows, seatStates: seatStates),
+              BuildSeats(side: "B", rows: rows, seatStates: seatStates),
             ],
           )
         ],

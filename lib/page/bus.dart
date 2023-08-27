@@ -7,20 +7,28 @@ import 'package:frontend/widgets/progressindicator.dart';
 import 'package:frontend/widgets/error.dart';
 import 'package:frontend/widgets/seat.dart';
 
-class BusView extends StatelessWidget {
+class BusView extends StatefulWidget {
   const BusView({super.key, required this.trip});
   final Map<dynamic, dynamic> trip;
 
   @override
+  State<BusView> createState() => _BusViewState();
+}
+
+class _BusViewState extends State<BusView> {
+  @override
   Widget build(BuildContext context) {
+    final trip = widget.trip;
     final id = trip['trip_id'];
     final lp = trip['bus_number'];
+    final url = trip['bus_img_url'];
     final name = trip['bus_name'];
+    final rows = trip['bus_rows'];
 
     return Scaffold(
       appBar: AppBar(),
       body: FutureBuilder(
-          future: getBusView(lp, id),
+          future: getTakenSeats(id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const MyProgressIndicator();
@@ -29,32 +37,34 @@ class BusView extends StatelessWidget {
             if (snapshot.hasError) {
               return ShowError(errorMessage: snapshot.error.toString());
             } else {
-              final url = snapshot.data!['info'][0][0];
-              final rows = snapshot.data!['info'][0][1];
-              trip['bus_img_url'] = url;
 
-              for (var i = 0; i < rows; i++) {
-                final a1 = 'A${2 * i + 1}';
-                final a2 = 'A${2 * i + 2}';
-                final b1 = 'B${2 * i + 1}';
-                final b2 = 'B${2 * i + 2}';
-                seatStates[a1] = ValueNotifier<SeatState>(SeatState.free);
-                seatStates[a2] = ValueNotifier<SeatState>(SeatState.free);
-                seatStates[b1] = ValueNotifier<SeatState>(SeatState.free);
-                seatStates[b2] = ValueNotifier<SeatState>(SeatState.free);
+              seatStates = {};
+
+              for (int i = 0; i < rows; i++) {
+                final a1 = SeatNum('A', 2 * i + 1);
+                final a2 = SeatNum('A', 2 * i + 2);
+                final b1 = SeatNum('B', 2 * i + 1);
+                final b2 = SeatNum('B', 2 * i + 2);
+                seatStates[a1.toString()] = SeatState.free;
+                seatStates[a2.toString()] = SeatState.free;
+                seatStates[b1.toString()] = SeatState.free;
+                seatStates[b2.toString()] = SeatState.free;
               }
 
-              snapshot.data!['seats'].map((i) {
-                seatStates[i[0]]?.value = SeatState.taken;
-              });
+              for (final i in snapshot.data!) {
+                final s = SeatNum(i[0], i[1]);
+                seatStates[s.toString()] = SeatState.taken;
+              }
+
+              notifier.value++;
 
               return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     DisplayBus(lp: lp, name: name, url: url),
-                    DisplaySeat(rows: rows),
-                    Fillform(trip: trip),
+                    DisplaySeat(rows: rows, seatStates: seatStates),
+                    Fillform(trip: trip, seatStates: seatStates),
                   ]);
             }
           }),

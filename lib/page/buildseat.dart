@@ -6,9 +6,11 @@ class BuildSeats extends StatefulWidget {
     super.key,
     required this.side,
     required this.rows,
+    required this.seatStates,
   });
   final String side;
   final int rows;
+  final dynamic seatStates;
 
   @override
   State<BuildSeats> createState() => _BuildSeatsState();
@@ -26,8 +28,8 @@ class _BuildSeatsState extends State<BuildSeats> {
             itemCount: widget.rows,
             itemBuilder: (context, i) => Row(
                   children: [
-                    Seat(num: '${widget.side}${2 * i + 1}'),
-                    Seat(num: '${widget.side}${2 * i + 2}'),
+                    Seat(num: SeatNum(widget.side, 2 * i + 1)),
+                    Seat(num: SeatNum(widget.side, 2 * i + 2)),
                   ],
                 )),
       ),

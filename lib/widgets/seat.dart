@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 
-Map<String, ValueNotifier<SeatState>> seatStates = {};
+class SeatNum {
+  final String col;
+  final int num;
+  const SeatNum (this.col, this.num);
+  @override
+    String toString() {
+      return '$col$num';
+    }
+}
+
+final notifier = ValueNotifier<int>(0);
 
 enum SeatState { taken, free, selected }
+
+Map<dynamic, dynamic> seatStates = {};
 
 class Seat extends StatefulWidget {
   const Seat({
@@ -10,7 +22,7 @@ class Seat extends StatefulWidget {
     required this.num,
   });
 
-  final String num;
+  final SeatNum num;
 
   @override
   State<Seat> createState() => _SeatState();
@@ -20,8 +32,9 @@ class _SeatState extends State<Seat> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: seatStates[widget.num]!,
-        builder: (context, value, _) {
+        valueListenable: notifier,
+        builder: (context, map, _) {
+          final value = seatStates[widget.num.toString()] as SeatState;
           Color seatColor = switch (value) {
             SeatState.taken => Colors.red,
             SeatState.free => Colors.blue,
@@ -36,12 +49,14 @@ class _SeatState extends State<Seat> {
                     return;
                   case SeatState.free:
                     setState(() {
-                      seatStates[widget.num]?.value = SeatState.selected;
+                      seatStates[widget.num.toString()] = SeatState.selected;
+                      notifier.value ++;
                     });
                     return;
                   case SeatState.selected:
                     setState(() {
-                      seatStates[widget.num]?.value = SeatState.free;
+                      seatStates[widget.num.toString()] = SeatState.free;
+                      notifier.value ++;
                     });
                     return;
                 }
@@ -56,7 +71,7 @@ class _SeatState extends State<Seat> {
                 child: Column(
                   children: [
                     const Icon(Icons.chair_outlined, size: 29),
-                    Text(widget.num,
+                    Text(widget.num.toString(),
                         style: const TextStyle(fontWeight: FontWeight.bold))
                   ],
                 ),

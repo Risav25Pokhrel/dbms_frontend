@@ -15,12 +15,12 @@ Future<List<dynamic>> getTripList(String start, String end, String date) async {
   return [];
 }
 
-Future<dynamic> getBusView(String lplate, int id) async {
+Future<dynamic> getTakenSeats(int id) async {
   try {
-    Uri req = Uri.http(baseUrl, "/bus_view",
-        {"licenseplate": lplate, "trip_id": id.toString()});
+    final req = Uri.http(baseUrl, "/taken_seats", {"trip_id": '$id'});
     final res = await get(req);
-    return json.decode(res.body);
+    final out = json.decode(res.body);
+    return out;
   } catch (e) {
     print(e.toString());
   }

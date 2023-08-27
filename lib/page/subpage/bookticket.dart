@@ -4,10 +4,13 @@ import 'package:frontend/widgets/mybutton.dart';
 import 'package:frontend/widgets/myformfield.dart';
 import 'package:intl/intl.dart';
 import 'package:frontend/widgets/seat.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
 class Fillform extends StatefulWidget {
-  const Fillform({super.key, required this.trip});
+  const Fillform({super.key, required this.trip, required this.seatStates});
   final Map<dynamic, dynamic> trip;
+  final dynamic seatStates;
 
   @override
   State<Fillform> createState() => _FillformState();
@@ -31,8 +34,7 @@ class _FillformState extends State<Fillform> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 10),
+        children: [ const SizedBox(height: 10),
           MyTextFormField(
               controller: name, labelText: 'Name', prefixIcon: Icons.person),
           MyTextFormField(
@@ -48,14 +50,25 @@ class _FillformState extends State<Fillform> {
             child: MyButton(
               title: 'Book Ticket',
               onTap: () async {
+                List<SeatNum> selected = [];
+                widget.seatStates.forEach((k, v) {
+                  if (v == SeatState.selected) {
+                    final ll = k.length == 2 ? k[1] : k[1] + k[2];
+                    selected.add(SeatNum(k[0], int.parse(ll)));
+                  }
+                });
+
                 if (name.text == '') {
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("Please enter your name.")));
                 } else if (phone.text == '') {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Please enter your phone number.")));
+                } else if (selected.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Please select atleast one seat.")));
                 } else {
-                  await _showTicket(context);
+                  await _showTicket(context, selected);
                 }
               },
             ),
@@ -74,14 +87,7 @@ class _FillformState extends State<Fillform> {
     ]));
   }
 
-  _showTicket(ctx) async {
-    List<String> selected = [];
-    seatStates.forEach((k, v) {
-      if (v.value == SeatState.selected) {
-        selected.add(k);
-      }
-    });
-
+  _showTicket(ctx, selected) async {
     await showDialog(
       context: ctx,
       builder: (context) => AlertDialog(
@@ -104,7 +110,7 @@ class _FillformState extends State<Fillform> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 3),
+              const SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -167,6 +173,43 @@ class _FillformState extends State<Fillform> {
                     title: 'Confirm',
                     onTap: () async {
                       Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+
+                      final a = [];
+                      final b = [];
+
+                      for (final i in selected) {
+                        a.add(i.num);
+                        b.add(i.col);
+                      }
+
+                      final body = {
+                        'name': name.text,
+                        'phone': phone.text,
+                        'seat_nums': a,
+                        'seat_cols': b,
+                        'trip_id': widget.trip['trip_id'],
+                        'booking_time': DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now()),
+                      };
+
+                      final resp = await post(Uri.http('localhost:8080', '/book'), body: json.encode(body));
+                      final psid = json.decode(resp.body)[0][0];
+                      await showDialog(
+                        context: ctx,
+                        builder: (context) => AlertDialog(
+                          title: const Text("Success"),
+                          content: Row(
+                            children: [
+                              Text("Created Booking With Passenger ID $psid"),
+                              const SizedBox(width: 30),
+                              TextButton(
+                                child: const Text("Back To Home Page"),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                            ],
+                          )
+                        )
+                      );
                     },
                   ),
                   MyButton(
